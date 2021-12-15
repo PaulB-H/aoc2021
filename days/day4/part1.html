@@ -7,25 +7,6 @@
     <title>Document</title>
   </head>
   <body>
-    <div>
-      <pre><code>const input = document.querySelector("pre").innerHTML.split("\n");
-const nums = input[0];
-input.splice(0, 2)
-
-const boards = [];
-let newboard = [];
-
-input.forEach((item, index) => {
-  if (item !== "") {
-    newboard.push(item);
-  } else if (item === "") {
-    boards.push(newboard);
-    newboard = [];
-  }
-});
-
-console.log(boards);</code></pre>
-    </div>
     <script>
       // const input = document.querySelector("pre").innerHTML.split("\n");
       // const nums = input[0].toString().split(",");
