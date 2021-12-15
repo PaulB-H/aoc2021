@@ -813,7 +813,52 @@ console.log(boards);</code></pre>
         });
       });
 
-      console.log(boards);
+      // console.log(boards);
+
+      const scoreBoards = [];
+
+      for (let i = 0; i < boards.length; i++) {
+        scoreBoards.push({
+          boardNum: i,
+          col0: 0,
+          col1: 0,
+          col2: 0,
+          col3: 0,
+          col4: 0,
+          row0: 0,
+          row1: 0,
+          row2: 0,
+          row3: 0,
+          row4: 0,
+        });
+      }
+
+      let winner = false;
+
+      const numsCalled = [];
+      let numToExclude;
+
+      const calculateWinningScore = (board, calledNum) => {
+        let score = 0;
+
+        let exclusionList = new Set();
+        for (let i = 0; i < numToExclude; i++) {
+          exclusionList.add(numsCalled[i]);
+        }
+
+        // console.log(exclusionList);
+
+        board.forEach((row, rowIndex) => {
+          row.forEach((num, numIndex) => {
+            // numIndex === colNum
+            if (!exclusionList.has(num)) {
+              score += num;
+            }
+          });
+        });
+
+        console.log("Answer for part 1: " + score * calledNum);
+      };
 
       const checkBingoNum = (bingoNum) => {
         boards.forEach((board, boardIndex) => {
@@ -821,10 +866,62 @@ console.log(boards);</code></pre>
             row.forEach((num, numIndex) => {
               // numIndex in here is === "column number"
               if (num === bingoNum) {
-                console.log("call num " + bingoNum);
-                console.log("board" + boardIndex);
-                console.log("row" + rowIndex);
-                console.log("col" + numIndex);
+                // number called
+                // console.log("call num " + bingoNum);
+
+                // hit on board #
+                // console.log("board" + boardIndex);
+
+                // Row
+                // console.log("row" + rowIndex);
+
+                // Col
+                // console.log("col" + numIndex);
+
+                scoreBoards.forEach((scoreBoard, scoreBoardIndex) => {
+                  if (
+                    (scoreBoard.boardNum === boardIndex) &
+                    (winner === false)
+                  ) {
+                    // This is the matching scoreBoard for this board
+                    scoreBoardExists = true;
+
+                    // Update nums on board
+                    scoreBoards[scoreBoardIndex][`row${rowIndex}`]++;
+
+                    if (scoreBoards[scoreBoardIndex][`row${rowIndex}`] === 5) {
+                      // console.log("Winning Board:");
+                      // console.log(scoreBoards[scoreBoardIndex]);
+                      // console.log("Exclude row" + rowIndex);
+                      winner = true;
+
+                      // console.log("winning num" + bingoNum);
+                      // console.log(boards[boardIndex]);
+                      // console.log("numsCalled");
+                      // console.log(numsCalled.length);
+                      numToExclude = numsCalled.length;
+
+                      calculateWinningScore(boards[boardIndex], bingoNum);
+                    }
+
+                    scoreBoards[scoreBoardIndex][`col${numIndex}`]++;
+
+                    if (scoreBoards[scoreBoardIndex][`col${numIndex}`] === 5) {
+                      // console.log("Winning Board:");
+                      // console.log(scoreBoards[scoreBoardIndex]);
+                      // console.log("Exclude col" + numIndex);
+                      winner = true;
+
+                      // console.log("winning num" + bingoNum);
+                      // console.log(boards[boardIndex]);
+                      // console.log("numsCalled");
+                      // console.log(numsCalled.length);
+                      numToExclude = numsCalled.length;
+
+                      calculateWinningScore(boards[boardIndex], bingoNum);
+                    }
+                  }
+                });
               }
             });
           });
@@ -833,12 +930,18 @@ console.log(boards);</code></pre>
 
       for (let i = 0; i < nums.length; i++) {
         let num = parseInt(nums[i]);
+        numsCalled.push(num);
         checkBingoNum(num);
       }
 
-      // So now we have all of our boards structured nicely
-      // We just need to check our numbers on each num
-      // of each board, and keep track of score per col/row
+      // Attempt one
+      // 12474 too high
+
+      // Attempt two
+      // 9366 too low
+
+      // Attempt three, correct!
+      // 10374
     </script>
   </body>
 </html>
